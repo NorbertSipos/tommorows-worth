@@ -8,8 +8,7 @@
     "build": "vite build && npm run generate-static",
     "generate-static": "node scripts/generate-static.js",
     "preview": "vite preview",
-    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "install": "npm install --legacy-peer-deps"
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0"
   },
   "dependencies": {
     "@radix-ui/react-slider": "^1.1.2",
