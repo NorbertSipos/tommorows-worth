@@ -1,0 +1,52 @@
+# robots.txt for development/localhost
+# Production version is generated automatically during build
+
+# Allow all bots to crawl the site (even in development)
+User-agent: *
+Allow: /
+
+# Allow access to static assets (images, CSS, JS)
+Allow: /icon.svg
+Allow: /manifest.json
+Allow: /_redirects
+Allow: /*.css$
+Allow: /*.js$
+Allow: /*.svg$
+Allow: /*.jpg$
+Allow: /*.png$
+Allow: /*.webp$
+Allow: /*.woff$
+Allow: /*.woff2$
+
+# Disallow private/admin areas
+Disallow: /api/
+Disallow: /admin/
+Disallow: /_next/
+Disallow: /.git/
+Disallow: /node_modules/
+
+# Specific rules for Google
+User-agent: Googlebot
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Crawl-delay: 0
+
+# Specific rules for Google Image Bot
+User-agent: Googlebot-Image
+Allow: /
+Allow: /*.jpg$
+Allow: /*.png$
+Allow: /*.svg$
+Allow: /*.webp$
+Disallow: /api/
+
+# Specific rules for Bing
+User-agent: Bingbot
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Crawl-delay: 0
+
+# Sitemap location (will be available in production)
+# Sitemap: http://localhost:5173/sitemap.xml
