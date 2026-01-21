@@ -6,6 +6,7 @@ import CompoundCalculator from '@/components/CompoundCalculator'
 import FourPercentRuleCalculator from '@/components/FourPercentRuleCalculator'
 import WealthProjectionChart from '@/components/WealthProjectionChart'
 import AdSensePlaceholder from '@/components/AdSensePlaceholder'
+import AdSense from '@/components/AdSense'
 import HowItWorks from '@/components/HowItWorks'
 import FAQ from '@/components/FAQ'
 import ResultsPanel from '@/components/ResultsPanel'
@@ -78,9 +79,10 @@ export default function HomePage() {
       {/* Header with AdSense Slot */}
       <header className="relative z-10 w-full p-3 sm:p-4 pt-4 sm:pt-6 lg:pt-8">
         <div className="max-w-7xl mx-auto">
-          <AdSensePlaceholder 
+          <AdSense 
             position="top" 
-            slotId="top-banner"
+            adSlot="9646444122"
+            adFormat="auto"
             className="mb-4 sm:mb-6"
           />
         </div>
