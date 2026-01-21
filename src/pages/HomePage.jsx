@@ -202,9 +202,10 @@ export default function HomePage() {
 
         {/* Google AdSense - Wide Slot Below Chart */}
         <div className="mb-8">
-          <AdSensePlaceholder 
+          <AdSense 
             position="sidebar" 
-            slotId="sidebar"
+            adSlot="9320523952"
+            adFormat="auto"
             className="w-full"
           />
         </div>

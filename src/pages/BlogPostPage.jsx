@@ -4,8 +4,9 @@ import { useState, useEffect, lazy, Suspense } from 'react'
 import { blogPosts, blogContent } from '@/data/blogPosts'
 import { updateMetaTags } from '@/lib/seo'
 
-// Lazy load AdSensePlaceholder
+// Lazy load AdSense components
 const AdSensePlaceholder = lazy(() => import('@/components/AdSensePlaceholder'))
+const AdSense = lazy(() => import('@/components/AdSense'))
 
 const getCategoryIcon = (category) => {
   switch (category) {
@@ -124,9 +125,10 @@ export default function BlogPostPage() {
         elements.push(
           <div key={`ad-${adCount}`} className="my-8">
             <Suspense fallback={<div className="card-input p-4 h-24 md:h-32" />}>
-              <AdSensePlaceholder 
+              <AdSense 
                 position="sidebar" 
-                slotId={`article-inline-${adCount}`}
+                adSlot="9958818205"
+                adFormat="auto"
                 className="w-full"
               />
             </Suspense>

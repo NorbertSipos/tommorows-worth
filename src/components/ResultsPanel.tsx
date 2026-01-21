@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import { Sparkles } from 'lucide-react'
 import { formatCurrency } from '@/lib/utils'
 import AdSensePlaceholder from '@/components/AdSensePlaceholder'
+import AdSense from '@/components/AdSense'
 
 interface ResultItem {
   label: string
@@ -80,11 +81,12 @@ export default function ResultsPanel({ results, title = 'Results' }: ResultsPane
           )
         })}
         
-        {/* AdSense Placeholder - Fills remaining space */}
+        {/* AdSense - Fills remaining space */}
         <div className="mt-auto pt-4">
-          <AdSensePlaceholder 
+          <AdSense 
             position="sidebar" 
-            slotId="results-sidebar"
+            adSlot="8277522134"
+            adFormat="auto"
             className="w-full"
           />
         </div>
