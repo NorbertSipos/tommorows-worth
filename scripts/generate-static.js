@@ -111,14 +111,31 @@ try {
   ]
 }
 
+// Function to escape XML entities in URLs
+function escapeXmlEntities(url) {
+  return url
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;')
+}
+
+// Function to ensure proper URL formatting (no double slashes)
+function formatUrl(base, path) {
+  const cleanBase = base.replace(/\/+$/, '') // Remove trailing slashes
+  const cleanPath = path.replace(/^\/+/, '/') // Ensure single leading slash
+  return `${cleanBase}${cleanPath}`
+}
+
 const staticPages = [
   { url: baseUrl, priority: 1.0, changeFreq: 'weekly' },
-  { url: `${baseUrl}/about`, priority: 0.8, changeFreq: 'monthly' },
-  { url: `${baseUrl}/blog`, priority: 0.9, changeFreq: 'weekly' },
+  { url: formatUrl(baseUrl, '/about'), priority: 0.8, changeFreq: 'monthly' },
+  { url: formatUrl(baseUrl, '/blog'), priority: 0.9, changeFreq: 'weekly' },
 ]
 
 const stockPages = stockSymbols.map((symbol) => ({
-  url: `${baseUrl}/calculator/${symbol}`,
+  url: formatUrl(baseUrl, `/calculator/${symbol}`),
   priority: 0.9,
   changeFreq: 'weekly',
 }))
@@ -126,7 +143,7 @@ const stockPages = stockSymbols.map((symbol) => ({
 const blogSlugs = blogPosts.map(post => post.slug)
 
 const blogPages = blogSlugs.map((slug) => ({
-  url: `${baseUrl}/blog/${slug}`,
+  url: formatUrl(baseUrl, `/blog/${slug}`),
   priority: 0.8,
   changeFreq: 'monthly',
 }))
@@ -137,7 +154,7 @@ const now = new Date().toISOString()
 const sitemapContent = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${allPages.map(page => `  <url>
-    <loc>${page.url}</loc>
+    <loc>${escapeXmlEntities(page.url)}</loc>
     <lastmod>${now}</lastmod>
     <changefreq>${page.changeFreq}</changefreq>
     <priority>${page.priority}</priority>
