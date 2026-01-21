@@ -9,7 +9,16 @@ const __dirname = dirname(__filename)
 const distDir = join(__dirname, '..', 'dist')
 
 // Generate robots.txt with SEO best practices
-const baseUrl = process.env.VITE_SITE_URL || 'https://tomorrowworth.com'
+// Normalize URL to always include protocol
+function normalizeUrl(url) {
+  if (!url) return 'https://tomorrowworth.com'
+  if (url.startsWith('http://') || url.startsWith('https://')) {
+    return url
+  }
+  return `https://${url.replace(/^https?:\/\//, '')}`
+}
+
+const baseUrl = normalizeUrl(process.env.VITE_SITE_URL || 'https://tomorrowworth.com')
 const robotsContent = `# robots.txt for ${baseUrl}
 # Generated automatically - Do not edit manually
 

@@ -25,7 +25,13 @@ export default function CalculatorPage() {
 
   useEffect(() => {
     if (stock) {
-      const baseUrl = import.meta.env.VITE_SITE_URL || 'https://tomorrowworth.com'
+      // Normalize URL to always include protocol
+      const normalizeUrl = (url) => {
+        if (!url) return 'https://tomorrowworth.com'
+        if (url.startsWith('http://') || url.startsWith('https://')) return url
+        return `https://${url.replace(/^https?:\/\//, '')}`
+      }
+      const baseUrl = normalizeUrl(import.meta.env.VITE_SITE_URL || 'https://tomorrowworth.com')
       const description = `Calculate dividend income from ${stock.name} (${stock.ticker}). Current dividend yield: ${stock.dividendYield}%. Estimate your annual and monthly dividend payments.`
       
       updateMetaTags({

@@ -1,6 +1,15 @@
 // SEO utility functions for dynamic meta tag management
 
-const baseUrl = import.meta.env.VITE_SITE_URL || 'https://tomorrowworth.com'
+// Normalize URL to always include protocol
+function normalizeUrl(url) {
+  if (!url) return 'https://tomorrowworth.com'
+  if (url.startsWith('http://') || url.startsWith('https://')) {
+    return url
+  }
+  return `https://${url.replace(/^https?:\/\//, '')}`
+}
+
+const baseUrl = normalizeUrl(import.meta.env.VITE_SITE_URL || 'https://tomorrowworth.com')
 
 export function updateMetaTags({
   title,
@@ -46,9 +55,13 @@ export function updateMetaTags({
   // Update Twitter card
   updateMetaTag('property', 'twitter:card', 'summary_large_image')
 
-  // Update canonical URL
+  // Update canonical URL (ensure it's always absolute with protocol)
   if (canonical || url) {
     let canonicalUrl = canonical || pageUrl
+    // Ensure canonical URL is absolute with protocol
+    if (!canonicalUrl.startsWith('http://') && !canonicalUrl.startsWith('https://')) {
+      canonicalUrl = `${baseUrl}${canonicalUrl.startsWith('/') ? '' : '/'}${canonicalUrl}`
+    }
     let link = document.querySelector("link[rel='canonical']")
     if (!link) {
       link = document.createElement('link')

@@ -46,7 +46,13 @@ export default function BlogPostPage() {
       setPost({ ...postMeta, content: content })
       
       // Update SEO meta tags
-      const baseUrl = import.meta.env.VITE_SITE_URL || 'https://tomorrowworth.com'
+      // Normalize URL to always include protocol
+      const normalizeUrl = (url) => {
+        if (!url) return 'https://tomorrowworth.com'
+        if (url.startsWith('http://') || url.startsWith('https://')) return url
+        return `https://${url.replace(/^https?:\/\//, '')}`
+      }
+      const baseUrl = normalizeUrl(import.meta.env.VITE_SITE_URL || 'https://tomorrowworth.com')
       updateMetaTags({
         title: `${postMeta.title} | Tomorrow Worth`,
         description: postMeta.description,

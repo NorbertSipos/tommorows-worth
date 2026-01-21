@@ -14,17 +14,27 @@ export function useSEO(config) {
   }, [location.pathname, config])
 }
 
+// Normalize URL to always include protocol
+function normalizeUrl(url) {
+  if (!url) return 'https://tomorrowworth.com'
+  if (url.startsWith('http://') || url.startsWith('https://')) {
+    return url
+  }
+  return `https://${url.replace(/^https?:\/\//, '')}`
+}
+
 // Hook for page-specific SEO
 export function usePageSEO(pageKey, customConfig = {}) {
   const location = useLocation()
   const baseConfig = seoConfig[pageKey] || {}
   
   useEffect(() => {
+    const siteUrl = normalizeUrl(import.meta.env.VITE_SITE_URL || 'https://tomorrowworth.com')
     const config = {
       ...baseConfig,
       ...customConfig,
-      url: `${import.meta.env.VITE_SITE_URL || 'https://tomorrowworth.com'}${location.pathname}`,
-      canonical: `${import.meta.env.VITE_SITE_URL || 'https://tomorrowworth.com'}${location.pathname}`,
+      url: `${siteUrl}${location.pathname}`,
+      canonical: `${siteUrl}${location.pathname}`,
     }
     
     updateMetaTags(config)
