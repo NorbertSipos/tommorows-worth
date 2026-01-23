@@ -106,16 +106,33 @@ export default function CompoundCalculator({ onProjectionUpdate, onResultsUpdate
           transition={{ delay: 0.1 }}
           className="card-input p-4 sm:p-6 space-y-4 sm:space-y-5 group"
         >
-          <div className="flex items-center justify-between">
-            <label className="flex items-center gap-2 sm:gap-3 text-sm sm:text-base font-medium text-slate-300">
+          <div className="flex items-center justify-between gap-2 min-w-0">
+            <label className="flex items-center gap-2 sm:gap-3 text-sm sm:text-base font-medium text-slate-300 flex-1 min-w-0">
               <div className="p-1.5 sm:p-2 rounded-lg flex-shrink-0 bg-emerald-500/10 border border-emerald-500/20">
                 <DollarSign className="w-4 h-4 text-emerald-400" />
               </div>
-              <span className="whitespace-nowrap">Initial Investment</span>
+              <span className="truncate">Initial Investment</span>
             </label>
-            <div className="text-lg sm:text-xl md:text-2xl font-bold text-white text-right flex-shrink-0">
-              {formatCurrency(initialAmount)}
-            </div>
+            <input
+              type="number"
+              value={initialAmount}
+              onChange={(e) => {
+                const value = parseFloat(e.target.value) || 0
+                setInitialAmount(Math.max(0, Math.min(500000, value)))
+              }}
+              onBlur={(e) => {
+                const value = parseFloat(e.target.value) || 10000
+                setInitialAmount(Math.max(0, Math.min(500000, value)))
+              }}
+              className="text-base sm:text-lg md:text-xl font-bold text-white text-right bg-transparent border-b-2 border-emerald-500/50 focus:border-emerald-500 focus:outline-none min-w-0 flex-shrink-0 max-w-[120px] sm:max-w-[160px] px-1 sm:px-2 py-1"
+              style={{
+                WebkitAppearance: 'none',
+                MozAppearance: 'textfield',
+              }}
+              min={0}
+              max={500000}
+              step={100}
+            />
           </div>
           <Slider.Root
             className="relative flex items-center select-none touch-none w-full h-8 sm:h-6"
@@ -149,9 +166,26 @@ export default function CompoundCalculator({ onProjectionUpdate, onResultsUpdate
               </div>
               <span className="whitespace-nowrap">Monthly Contribution</span>
             </label>
-            <div className="text-lg sm:text-xl md:text-2xl font-bold text-white text-right flex-shrink-0">
-              {formatCurrency(monthlyContribution)}
-            </div>
+            <input
+              type="number"
+              value={monthlyContribution}
+              onChange={(e) => {
+                const value = parseFloat(e.target.value) || 0
+                setMonthlyContribution(Math.max(0, Math.min(5000, value)))
+              }}
+              onBlur={(e) => {
+                const value = parseFloat(e.target.value) || 500
+                setMonthlyContribution(Math.max(0, Math.min(5000, value)))
+              }}
+              className="text-base sm:text-lg md:text-xl font-bold text-white text-right bg-transparent border-b-2 border-teal-500/50 focus:border-teal-500 focus:outline-none min-w-0 flex-shrink-0 max-w-[120px] sm:max-w-[160px] px-1 sm:px-2 py-1"
+              style={{
+                WebkitAppearance: 'none',
+                MozAppearance: 'textfield',
+              }}
+              min={0}
+              max={5000}
+              step={50}
+            />
           </div>
           <Slider.Root
             className="relative flex items-center select-none touch-none w-full h-8 sm:h-6"
@@ -178,15 +212,35 @@ export default function CompoundCalculator({ onProjectionUpdate, onResultsUpdate
           transition={{ delay: 0.3 }}
           className="card-input p-4 sm:p-6 space-y-4 sm:space-y-5 group"
         >
-          <div className="flex items-center justify-between">
-            <label className="flex items-center gap-2 sm:gap-3 text-sm sm:text-base font-medium text-slate-300">
+          <div className="flex items-center justify-between gap-2 min-w-0">
+            <label className="flex items-center gap-2 sm:gap-3 text-sm sm:text-base font-medium text-slate-300 flex-1 min-w-0">
               <div className="p-1.5 sm:p-2 rounded-lg flex-shrink-0 bg-cyan-500/10 border border-cyan-500/20">
                 <Percent className="w-4 h-4 text-cyan-400" />
               </div>
-              <span>Expected Annual Return</span>
+              <span className="truncate">Expected Annual Return</span>
             </label>
-            <div className="text-lg sm:text-xl md:text-2xl font-bold text-white text-right flex-shrink-0">
-              {annualReturn.toFixed(2)}%
+            <div className="flex items-center gap-1">
+              <input
+                type="number"
+                value={annualReturn}
+                onChange={(e) => {
+                  const value = parseFloat(e.target.value) || 0
+                  setAnnualReturn(Math.max(1, Math.min(20, value)))
+                }}
+                onBlur={(e) => {
+                  const value = parseFloat(e.target.value) || 7
+                  setAnnualReturn(Math.max(1, Math.min(20, value)))
+                }}
+                className="text-base sm:text-lg md:text-xl font-bold text-white text-right bg-transparent border-b-2 border-cyan-500/50 focus:border-cyan-500 focus:outline-none min-w-0 flex-shrink-0 max-w-[80px] sm:max-w-[100px] px-1 sm:px-2 py-1"
+                style={{
+                  WebkitAppearance: 'none',
+                  MozAppearance: 'textfield',
+                }}
+                min={1}
+                max={20}
+                step={0.1}
+              />
+              <span className="text-base sm:text-lg md:text-xl font-bold text-white flex-shrink-0">%</span>
             </div>
           </div>
           <Slider.Root
@@ -214,15 +268,35 @@ export default function CompoundCalculator({ onProjectionUpdate, onResultsUpdate
           transition={{ delay: 0.4 }}
           className="card-input p-4 sm:p-6 space-y-4 sm:space-y-5 group"
         >
-          <div className="flex items-center justify-between">
-            <label className="flex items-center gap-2 sm:gap-3 text-sm sm:text-base font-medium text-slate-300">
+          <div className="flex items-center justify-between gap-2 min-w-0">
+            <label className="flex items-center gap-2 sm:gap-3 text-sm sm:text-base font-medium text-slate-300 flex-1 min-w-0">
               <div className="p-1.5 sm:p-2 rounded-lg flex-shrink-0 bg-blue-500/10 border border-blue-500/20">
                 <Calendar className="w-4 h-4 text-blue-400" />
               </div>
-              <span>Investment Period</span>
+              <span className="truncate">Investment Period</span>
             </label>
-            <div className="text-lg sm:text-xl md:text-2xl font-bold text-white text-right flex-shrink-0">
-              {years} years
+            <div className="flex items-center gap-1">
+              <input
+                type="number"
+                value={years}
+                onChange={(e) => {
+                  const value = parseFloat(e.target.value) || 0
+                  setYears(Math.max(1, Math.min(50, value)))
+                }}
+                onBlur={(e) => {
+                  const value = parseFloat(e.target.value) || 20
+                  setYears(Math.max(1, Math.min(50, value)))
+                }}
+                className="text-base sm:text-lg md:text-xl font-bold text-white text-right bg-transparent border-b-2 border-blue-500/50 focus:border-blue-500 focus:outline-none min-w-0 flex-shrink-0 max-w-[80px] sm:max-w-[100px] px-1 sm:px-2 py-1"
+                style={{
+                  WebkitAppearance: 'none',
+                  MozAppearance: 'textfield',
+                }}
+                min={1}
+                max={50}
+                step={1}
+              />
+              <span className="text-base sm:text-lg md:text-xl font-bold text-white flex-shrink-0">years</span>
             </div>
           </div>
           <Slider.Root

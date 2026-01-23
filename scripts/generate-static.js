@@ -132,6 +132,15 @@ const staticPages = [
   { url: baseUrl, priority: 1.0, changeFreq: 'weekly' },
   { url: formatUrl(baseUrl, '/about'), priority: 0.8, changeFreq: 'monthly' },
   { url: formatUrl(baseUrl, '/blog'), priority: 0.9, changeFreq: 'weekly' },
+  // SEO-friendly calculator subpages
+  { url: formatUrl(baseUrl, '/dividend-calculator'), priority: 0.9, changeFreq: 'weekly' },
+  { url: formatUrl(baseUrl, '/compound-calculator'), priority: 0.9, changeFreq: 'weekly' },
+  { url: formatUrl(baseUrl, '/compound-interest-calculator'), priority: 0.9, changeFreq: 'weekly' },
+  { url: formatUrl(baseUrl, '/4percent-calculator'), priority: 0.9, changeFreq: 'weekly' },
+  { url: formatUrl(baseUrl, '/4-percent-rule-calculator'), priority: 0.9, changeFreq: 'weekly' },
+  { url: formatUrl(baseUrl, '/latte-factor-calculator'), priority: 0.9, changeFreq: 'weekly' },
+  { url: formatUrl(baseUrl, '/inflation-calculator'), priority: 0.9, changeFreq: 'weekly' },
+  { url: formatUrl(baseUrl, '/inflation-time-machine'), priority: 0.9, changeFreq: 'weekly' },
 ]
 
 const stockPages = stockSymbols.map((symbol) => ({

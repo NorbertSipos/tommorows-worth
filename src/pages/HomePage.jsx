@@ -1,9 +1,12 @@
 import { useState, useCallback, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { TrendingUp, PieChart, Target } from 'lucide-react'
+import { TrendingUp, PieChart, Target, Coffee, Clock } from 'lucide-react'
 import DividendCalculator from '@/components/DividendCalculator'
 import CompoundCalculator from '@/components/CompoundCalculator'
 import FourPercentRuleCalculator from '@/components/FourPercentRuleCalculator'
+import LatteFactorCalculator from '@/components/LatteFactorCalculator'
+import InflationTimeMachine from '@/components/InflationTimeMachine'
 import WealthProjectionChart from '@/components/WealthProjectionChart'
 import AdSensePlaceholder from '@/components/AdSensePlaceholder'
 import AdSense from '@/components/AdSense'
@@ -12,11 +15,146 @@ import FAQ from '@/components/FAQ'
 import ResultsPanel from '@/components/ResultsPanel'
 import Logo from '@/components/Logo'
 import { usePageSEO } from '@/hooks/useSEO'
+import { updateMetaTags } from '@/lib/seo'
+
+// Normalize URL helper (same as in seo.js)
+function normalizeUrl(url) {
+  if (!url) return 'https://tomorrowworth.com'
+  if (url.startsWith('http://') || url.startsWith('https://')) {
+    return url
+  }
+  return `https://${url.replace(/^https?:\/\//, '')}`
+}
+
+// Map URL slugs to calculator IDs
+const calculatorSlugMap = {
+  'dividend-calculator': 'dividend',
+  'compound-calculator': 'compound',
+  'compound-interest-calculator': 'compound',
+  '4percent-calculator': '4percent',
+  '4-percent-rule-calculator': '4percent',
+  'latte-factor-calculator': 'latte',
+  'inflation-calculator': 'inflation',
+  'inflation-time-machine': 'inflation',
+}
+
+// Map calculator IDs to SEO data
+const calculatorSEO = {
+  dividend: {
+    title: 'Dividend Calculator | Calculate Dividend Income & Growth | Tomorrow Worth',
+    description: 'Free dividend calculator to calculate dividend income, growth projections, and monthly/annual payments. Plan your dividend investment strategy with real-time calculations.',
+    keywords: 'dividend calculator, dividend income calculator, dividend yield calculator, dividend growth calculator, dividend reinvestment calculator, dividend investment calculator',
+  },
+  compound: {
+    title: 'Compound Interest Calculator | Calculate Investment Growth | Tomorrow Worth',
+    description: 'Free compound interest calculator to calculate investment growth over time. See how compound interest works with monthly contributions and different return rates.',
+    keywords: 'compound interest calculator, investment calculator, compound growth calculator, savings calculator, investment growth calculator, compound interest formula',
+  },
+  '4percent': {
+    title: '4% Rule Calculator | Financial Independence Calculator | Tomorrow Worth',
+    description: 'Free 4% rule calculator to determine your financial independence timeline. Calculate how much you need to retire using the 4% withdrawal rule.',
+    keywords: '4% rule calculator, financial independence calculator, FIRE calculator, retirement calculator, 4 percent rule, early retirement calculator',
+  },
+  latte: {
+    title: 'Latte Factor Calculator | Opportunity Cost Calculator | Tomorrow Worth',
+    description: 'Free latte factor calculator to see the opportunity cost of daily expenses. Calculate how much wealth you could accumulate by investing small daily purchases.',
+    keywords: 'latte factor calculator, opportunity cost calculator, daily expense calculator, small purchase calculator, wealth calculator, spending calculator',
+  },
+  inflation: {
+    title: 'Inflation Calculator | Purchasing Power Calculator | Tomorrow Worth',
+    description: 'Free inflation calculator to see how purchasing power changes over time. Calculate the real value of money from 1920 to 2026 using historical CPI data.',
+    keywords: 'inflation calculator, purchasing power calculator, CPI calculator, inflation rate calculator, money value calculator, historical inflation calculator',
+  },
+}
 
 export default function HomePage() {
-  // Set up SEO meta tags
-  usePageSEO('home')
-  const [activeCalculator, setActiveCalculator] = useState('dividend')
+  const location = useLocation()
+  const pathname = location.pathname
+  
+  // Extract calculator type from URL pathname
+  const getCalculatorTypeFromPath = () => {
+    const path = pathname.replace(/^\//, '').toLowerCase()
+    return path || null
+  }
+  
+  // Determine active calculator from URL or default to dividend
+  const getInitialCalculator = () => {
+    const calculatorType = getCalculatorTypeFromPath()
+    if (calculatorType) {
+      const mappedId = calculatorSlugMap[calculatorType]
+      if (mappedId) return mappedId
+    }
+    return 'dividend'
+  }
+  
+  const [activeCalculator, setActiveCalculator] = useState(getInitialCalculator())
+  
+  // Update active calculator when URL changes
+  useEffect(() => {
+    const calculatorType = getCalculatorTypeFromPath()
+    let newCalculator = 'dividend'
+    if (calculatorType) {
+      const mappedId = calculatorSlugMap[calculatorType]
+      if (mappedId) newCalculator = mappedId
+    }
+    setActiveCalculator(newCalculator)
+  }, [pathname])
+  
+  // Update SEO meta tags based on active calculator
+  useEffect(() => {
+    const seoData = calculatorSEO[activeCalculator]
+    const baseUrl = normalizeUrl(import.meta.env.VITE_SITE_URL || 'https://tomorrowworth.com')
+    const currentUrl = pathname !== '/' 
+      ? `${baseUrl}${pathname}`
+      : baseUrl
+    
+    if (seoData) {
+      // Create structured data for calculator pages
+      const structuredData = {
+        '@context': 'https://schema.org',
+        '@type': 'SoftwareApplication',
+        name: seoData.title.split(' | ')[0],
+        applicationCategory: 'FinanceApplication',
+        description: seoData.description,
+        url: currentUrl,
+        offers: {
+          '@type': 'Offer',
+          price: '0',
+          priceCurrency: 'USD',
+          availability: 'https://schema.org/InStock',
+        },
+        featureList: [
+          'Real-time calculations',
+          '20-year projections',
+          'Interactive sliders',
+          'Visual charts',
+          'Mobile responsive',
+        ],
+        operatingSystem: 'Any',
+        browserRequirements: 'Requires JavaScript. Requires HTML5.',
+        inLanguage: 'en-US',
+      }
+      
+      updateMetaTags({
+        title: seoData.title,
+        description: seoData.description,
+        keywords: seoData.keywords,
+        url: currentUrl,
+        canonical: currentUrl,
+        structuredData: structuredData,
+      })
+    } else {
+      // Default home page SEO
+      updateMetaTags({
+        title: 'Tomorrow Worth | Dividend, Compound Interest & 4% Rule Calculator',
+        description: 'Free investment calculators: Calculate dividend income, compound interest growth, and financial independence with the 4% rule. Plan your wealth journey with real-time calculations and 20-year projections.',
+        keywords: 'investment calculator, dividend calculator, compound interest calculator, 4% rule calculator, financial independence calculator',
+        url: currentUrl,
+        canonical: currentUrl,
+      })
+    }
+  }, [activeCalculator, pathname])
+  
   const [projectionData, setProjectionData] = useState([])
   const [calculatorResults, setCalculatorResults] = useState([])
 
@@ -32,6 +170,8 @@ export default function HomePage() {
     { id: 'dividend', name: 'Dividend', icon: TrendingUp, color: 'from-blue-500 to-cyan-500', bgColor: 'bg-blue-500/10' },
     { id: 'compound', name: 'Compound', icon: PieChart, color: 'from-emerald-500 to-teal-500', bgColor: 'bg-emerald-500/10' },
     { id: '4percent', name: '4% Rule', icon: Target, color: 'from-orange-500 to-rose-500', bgColor: 'bg-orange-500/10' },
+    { id: 'latte', name: 'Latte Factor', icon: Coffee, color: 'from-emerald-500 to-teal-500', bgColor: 'bg-emerald-500/10' },
+    { id: 'inflation', name: 'Inflation', icon: Clock, color: 'from-amber-500 to-yellow-500', bgColor: 'bg-amber-500/10' },
   ]
 
   return (
@@ -63,6 +203,18 @@ export default function HomePage() {
                 position: 3,
                 name: '4% Rule Calculator',
                 description: 'Calculate financial independence timeline using the 4% rule',
+              },
+              {
+                '@type': 'ListItem',
+                position: 4,
+                name: 'Latte Factor Calculator',
+                description: 'Calculate the opportunity cost of daily expenses and small purchases',
+              },
+              {
+                '@type': 'ListItem',
+                position: 5,
+                name: 'Inflation Time Machine',
+                description: 'See how purchasing power changes over time with inflation calculations',
               },
             ],
           }),
@@ -156,6 +308,22 @@ export default function HomePage() {
                 )}
                 {activeCalculator === '4percent' && (
                   <FourPercentRuleCalculator 
+                    onProjectionUpdate={handleProjectionUpdate} 
+                    onResultsUpdate={handleResultsUpdate}
+                    showResults={false}
+                    compact={true}
+                  />
+                )}
+                {activeCalculator === 'latte' && (
+                  <LatteFactorCalculator 
+                    onProjectionUpdate={handleProjectionUpdate} 
+                    onResultsUpdate={handleResultsUpdate}
+                    showResults={false}
+                    compact={true}
+                  />
+                )}
+                {activeCalculator === 'inflation' && (
+                  <InflationTimeMachine 
                     onProjectionUpdate={handleProjectionUpdate} 
                     onResultsUpdate={handleResultsUpdate}
                     showResults={false}

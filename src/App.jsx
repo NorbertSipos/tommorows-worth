@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate, useParams } from 'react-router-dom'
 import { useEffect } from 'react'
 import Navigation from './components/Navigation'
 import HomePage from './pages/HomePage'
@@ -7,6 +7,30 @@ import BlogPage from './pages/BlogPage'
 import BlogPostPage from './pages/BlogPostPage'
 import CalculatorPage from './pages/CalculatorPage'
 import { initializeAnalytics } from './lib/analytics'
+
+// Component to redirect stock symbols to calculator route
+function StockRedirect() {
+  const { symbol } = useParams()
+  // Check if it's a known route (about, blog, calculator pages, etc.) - if so, let it fall through
+  const knownRoutes = [
+    'about', 
+    'blog', 
+    'calculator',
+    'dividend-calculator',
+    'compound-calculator',
+    'compound-interest-calculator',
+    '4percent-calculator',
+    '4-percent-rule-calculator',
+    'latte-factor-calculator',
+    'inflation-calculator',
+    'inflation-time-machine',
+  ]
+  if (knownRoutes.includes(symbol?.toLowerCase())) {
+    return <Navigate to="/" replace />
+  }
+  // Otherwise, redirect to calculator route
+  return <Navigate to={`/calculator/${symbol}`} replace />
+}
 
 function App() {
   useEffect(() => {
@@ -44,6 +68,17 @@ function App() {
         <Route path="/blog" element={<BlogPage />} />
         <Route path="/blog/:slug" element={<BlogPostPage />} />
         <Route path="/calculator/:symbol" element={<CalculatorPage />} />
+        {/* SEO-friendly calculator subpages - must come before catch-all route */}
+        <Route path="/dividend-calculator" element={<HomePage />} />
+        <Route path="/compound-calculator" element={<HomePage />} />
+        <Route path="/compound-interest-calculator" element={<HomePage />} />
+        <Route path="/4percent-calculator" element={<HomePage />} />
+        <Route path="/4-percent-rule-calculator" element={<HomePage />} />
+        <Route path="/latte-factor-calculator" element={<HomePage />} />
+        <Route path="/inflation-calculator" element={<HomePage />} />
+        <Route path="/inflation-time-machine" element={<HomePage />} />
+        {/* Redirect short stock URLs to calculator route */}
+        <Route path="/:symbol" element={<StockRedirect />} />
       </Routes>
     </>
   )

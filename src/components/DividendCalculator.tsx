@@ -133,16 +133,33 @@ export default function DividendCalculator({ onProjectionUpdate, onResultsUpdate
           transition={{ delay: 0.1 }}
           className="card-input p-4 sm:p-6 space-y-4 sm:space-y-5 group"
         >
-          <div className="flex items-center justify-between gap-2">
-            <label className="flex items-center gap-2 sm:gap-3 text-sm sm:text-base font-medium text-slate-300">
+          <div className="flex items-center justify-between gap-2 min-w-0">
+            <label className="flex items-center gap-2 sm:gap-3 text-sm sm:text-base font-medium text-slate-300 flex-1 min-w-0">
               <div className="p-1.5 sm:p-2 rounded-lg bg-blue-500/10 border border-blue-500/20 flex-shrink-0">
                 <DollarSign className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-400" />
               </div>
-              <span className="whitespace-nowrap">Investment Amount</span>
+              <span className="truncate">Investment Amount</span>
             </label>
-            <div className="text-lg sm:text-xl md:text-2xl font-bold text-white text-right flex-shrink-0">
-              {formatCurrency(investmentAmount)}
-            </div>
+            <input
+              type="number"
+              value={investmentAmount}
+              onChange={(e) => {
+                const value = parseFloat(e.target.value) || 0
+                setInvestmentAmount(Math.max(1000, Math.min(1000000, value)))
+              }}
+              onBlur={(e) => {
+                const value = parseFloat(e.target.value) || 1000
+                setInvestmentAmount(Math.max(1000, Math.min(1000000, value)))
+              }}
+              className="text-base sm:text-lg md:text-xl font-bold text-white text-right bg-transparent border-b-2 border-blue-500/50 focus:border-blue-500 focus:outline-none min-w-0 flex-shrink-0 max-w-[120px] sm:max-w-[160px] px-1 sm:px-2 py-1"
+              style={{
+                WebkitAppearance: 'none',
+                MozAppearance: 'textfield',
+              }}
+              min={1000}
+              max={1000000}
+              step={100}
+            />
           </div>
           <Slider.Root
             className="relative flex items-center select-none touch-none w-full h-8 sm:h-6 group"
@@ -172,15 +189,35 @@ export default function DividendCalculator({ onProjectionUpdate, onResultsUpdate
           transition={{ delay: 0.2 }}
           className="card-input p-4 sm:p-6 space-y-4 sm:space-y-5 group"
         >
-          <div className="flex items-center justify-between gap-2">
-            <label className="flex items-center gap-2 sm:gap-3 text-sm sm:text-base font-medium text-slate-300">
+          <div className="flex items-center justify-between gap-2 min-w-0">
+            <label className="flex items-center gap-2 sm:gap-3 text-sm sm:text-base font-medium text-slate-300 flex-1 min-w-0">
               <div className="p-1.5 sm:p-2 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex-shrink-0">
                 <Percent className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-cyan-400" />
               </div>
-              <span className="whitespace-nowrap">Annual Yield</span>
+              <span className="truncate">Annual Yield</span>
             </label>
-            <div className="text-lg sm:text-xl md:text-2xl font-bold text-white text-right flex-shrink-0">
-              {annualYield.toFixed(2)}%
+            <div className="flex items-center gap-1">
+              <input
+                type="number"
+                value={annualYield}
+                onChange={(e) => {
+                  const value = parseFloat(e.target.value) || 0
+                  setAnnualYield(Math.max(0.5, Math.min(15, value)))
+                }}
+                onBlur={(e) => {
+                  const value = parseFloat(e.target.value) || 3.5
+                  setAnnualYield(Math.max(0.5, Math.min(15, value)))
+                }}
+                className="text-base sm:text-lg md:text-xl font-bold text-white text-right bg-transparent border-b-2 border-cyan-500/50 focus:border-cyan-500 focus:outline-none min-w-0 flex-shrink-0 max-w-[80px] sm:max-w-[100px] px-1 sm:px-2 py-1"
+                style={{
+                  WebkitAppearance: 'none',
+                  MozAppearance: 'textfield',
+                }}
+                min={0.5}
+                max={15}
+                step={0.1}
+              />
+              <span className="text-base sm:text-lg md:text-xl font-bold text-white flex-shrink-0">%</span>
             </div>
           </div>
           <Slider.Root
@@ -211,15 +248,35 @@ export default function DividendCalculator({ onProjectionUpdate, onResultsUpdate
           transition={{ delay: 0.3 }}
           className="card-input p-4 sm:p-6 space-y-4 sm:space-y-5 group"
         >
-          <div className="flex items-center justify-between gap-2">
-            <label className="flex items-center gap-2 sm:gap-3 text-sm sm:text-base font-medium text-slate-300">
+          <div className="flex items-center justify-between gap-2 min-w-0">
+            <label className="flex items-center gap-2 sm:gap-3 text-sm sm:text-base font-medium text-slate-300 flex-1 min-w-0">
               <div className="p-1.5 sm:p-2 rounded-lg bg-teal-500/10 border border-teal-500/20 flex-shrink-0">
                 <TrendingUp className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-teal-400" />
               </div>
-              <span className="whitespace-nowrap">Dividend Growth Rate</span>
+              <span className="truncate">Dividend Growth Rate</span>
             </label>
-            <div className="text-lg sm:text-xl md:text-2xl font-bold text-white text-right flex-shrink-0">
-              {dividendGrowth.toFixed(2)}%
+            <div className="flex items-center gap-1">
+              <input
+                type="number"
+                value={dividendGrowth}
+                onChange={(e) => {
+                  const value = parseFloat(e.target.value) || 0
+                  setDividendGrowth(Math.max(0, Math.min(20, value)))
+                }}
+                onBlur={(e) => {
+                  const value = parseFloat(e.target.value) || 5
+                  setDividendGrowth(Math.max(0, Math.min(20, value)))
+                }}
+                className="text-base sm:text-lg md:text-xl font-bold text-white text-right bg-transparent border-b-2 border-teal-500/50 focus:border-teal-500 focus:outline-none min-w-0 flex-shrink-0 max-w-[80px] sm:max-w-[100px] px-1 sm:px-2 py-1"
+                style={{
+                  WebkitAppearance: 'none',
+                  MozAppearance: 'textfield',
+                }}
+                min={0}
+                max={20}
+                step={0.5}
+              />
+              <span className="text-base sm:text-lg md:text-xl font-bold text-white flex-shrink-0">%</span>
             </div>
           </div>
           <Slider.Root

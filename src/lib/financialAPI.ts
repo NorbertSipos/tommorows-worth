@@ -89,7 +89,12 @@ async function fetchFromAlphaVantage(symbol: string, apiKey: string): Promise<St
   try {
     // Fetch overview (company info and dividend data)
     const overviewUrl = `https://www.alphavantage.co/query?function=OVERVIEW&symbol=${symbol}&apikey=${apiKey}`
-    const overviewResponse = await fetch(overviewUrl, { next: { revalidate: 3600 } })
+    const overviewResponse = await fetch(overviewUrl)
+    
+    if (!overviewResponse.ok) {
+      throw new Error(`API request failed: ${overviewResponse.status}`)
+    }
+    
     const overviewData = await overviewResponse.json()
 
     if (overviewData['Error Message'] || overviewData['Note']) {

@@ -17,6 +17,17 @@
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
   }
+  /* Hide number input spinners - more specific to ensure it works */
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    margin: 0 !important;
+    display: none !important;
+  }
 }
 
 @layer utilities {

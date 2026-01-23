@@ -2,7 +2,7 @@ import { motion } from 'framer-motion'
 import { BookOpen, ExternalLink } from 'lucide-react'
 
 interface HowItWorksProps {
-  calculatorType: 'dividend' | 'compound' | '4percent'
+  calculatorType: 'dividend' | 'compound' | '4percent' | 'latte' | 'inflation'
 }
 
 export default function HowItWorks({ calculatorType }: HowItWorksProps) {
@@ -117,9 +117,92 @@ export default function HowItWorks({ calculatorType }: HowItWorksProps) {
         </ul>
       `,
     },
+    latte: {
+      title: 'How the Latte Factor Calculator Works',
+      content: `
+        <p class="mb-4">
+          The "Latte Factor" concept, popularized by financial author David Bach, demonstrates how small daily expenses 
+          can compound into significant lost wealth over time. This calculator shows the opportunity cost of spending 
+          money on small purchases instead of investing it.
+        </p>
+        <div class="bg-slate-800/50 p-4 rounded-lg mb-4 font-mono text-sm">
+          Monthly Expense = Daily Expense × 30.4375<br/>
+          Future Value = Monthly × [((1 + r)^n - 1) / r]<br/>
+          Where r = monthly interest rate, n = total months
+        </div>
+        <p class="mb-4">
+          <strong>Example:</strong> Spending $5 daily on coffee ($150/month) for 30 years at 8% annual return 
+          means you've spent $54,000, but lost $225,000 in potential wealth. That's $171,000 in opportunity cost!
+        </p>
+        <p class="mb-4">
+          The calculator uses the <strong>future value of an annuity formula</strong>, which calculates how much 
+          a series of regular payments would be worth if invested at a given interest rate over time. This is the 
+          standard formula used in finance for calculating retirement savings, loan payments, and investment growth.
+        </p>
+        <p class="mb-4">
+          <strong>Key Insight:</strong> The difference between "Total Spent" and "Potential Wealth" shows the true 
+          cost of small expenses. This isn't about never buying coffee—it's about understanding the long-term 
+          impact of spending habits and making informed choices.
+        </p>
+        <p>
+          <strong>Key Sources:</strong>
+        </p>
+        <ul class="list-disc list-inside space-y-2 mb-4 ml-4">
+          <li><a href="https://www.investopedia.com/terms/a/annuity.asp" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline">
+            Investopedia: Annuity Formula Explained
+          </a></li>
+          <li><a href="https://www.investopedia.com/terms/o/opportunitycost.asp" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline">
+            Investopedia: Opportunity Cost Definition
+          </a></li>
+          <li><a href="https://www.finra.org/investors/learn-to-invest/types-of-investments" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline">
+            FINRA: Understanding Investment Returns
+          </a></li>
+        </ul>
+      `,
+    },
+    inflation: {
+      title: 'How the Inflation Time Machine Works',
+      content: `
+        <p class="mb-4">
+          The Inflation Time Machine uses the Consumer Price Index (CPI) to calculate how purchasing power changes over time. 
+          CPI measures the average change in prices for goods and services, which is the standard measure of inflation.
+        </p>
+        <div class="bg-slate-800/50 p-4 rounded-lg mb-4 font-mono text-sm">
+          Equivalent Value = Original Amount × (CPI_Target_Year / CPI_Starting_Year)<br/>
+          Percentage Change = ((Equivalent Value - Original Amount) / Original Amount) × 100
+        </div>
+        <p class="mb-4">
+          <strong>Example:</strong> $1,000 in 2000 (CPI: 172.2) is equivalent to $1,933 in 2026 (CPI: 332.9). 
+          That's a 93.3% increase, meaning you need almost double the money to buy the same goods today.
+        </p>
+        <p class="mb-4">
+          The calculator uses official CPI data from the US Bureau of Labor Statistics (for USD) and Eurostat estimates (for EUR). 
+          Historical data spans from 1970 to 2024, with 2025-2026 estimated based on recent inflation trends (approximately 3% annually).
+        </p>
+        <p class="mb-4">
+          <strong>Key Insight:</strong> The shopping basket visualization shows how inflation affects purchasing power. 
+          When going forward in time, the basket shrinks—your money buys less. This is why investments that outpace 
+          inflation are crucial for long-term wealth preservation.
+        </p>
+        <p>
+          <strong>Key Sources:</strong>
+        </p>
+        <ul class="list-disc list-inside space-y-2 mb-4 ml-4">
+          <li><a href="https://www.bls.gov/cpi/" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline">
+            US Bureau of Labor Statistics: Consumer Price Index
+          </a></li>
+          <li><a href="https://www.investopedia.com/terms/c/consumerpriceindex.asp" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline">
+            Investopedia: Consumer Price Index (CPI) Explained
+          </a></li>
+          <li><a href="https://www.investopedia.com/terms/i/inflation.asp" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline">
+            Investopedia: Inflation Definition and Impact
+          </a></li>
+        </ul>
+      `,
+    },
   }
 
-  const selected = content[calculatorType]
+  const selected = content[calculatorType] || content.dividend
 
   return (
     <motion.section

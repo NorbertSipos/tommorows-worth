@@ -157,16 +157,33 @@ export default function FourPercentRuleCalculator({ onProjectionUpdate, onResult
           transition={{ delay: 0.1 }}
           className="card-input p-4 sm:p-6 space-y-4 sm:space-y-5 group"
         >
-          <div className="flex items-center justify-between gap-2">
-            <label className="flex items-center gap-2 sm:gap-3 text-sm sm:text-base font-medium text-slate-300">
+          <div className="flex items-center justify-between gap-2 min-w-0">
+            <label className="flex items-center gap-2 sm:gap-3 text-sm sm:text-base font-medium text-slate-300 flex-1 min-w-0">
               <div className="p-1.5 sm:p-2 rounded-lg flex-shrink-0 bg-orange-500/10 border border-orange-500/20">
                 <DollarSign className="w-4 h-4 text-orange-400" />
               </div>
-              <span>Monthly Expenses</span>
+              <span className="truncate">Monthly Expenses</span>
             </label>
-            <div className="text-lg sm:text-xl md:text-2xl font-bold text-white text-right flex-shrink-0">
-              {formatCurrency(monthlyExpenses)}
-            </div>
+            <input
+              type="number"
+              value={monthlyExpenses}
+              onChange={(e) => {
+                const value = parseFloat(e.target.value) || 0
+                setMonthlyExpenses(Math.max(1000, Math.min(20000, value)))
+              }}
+              onBlur={(e) => {
+                const value = parseFloat(e.target.value) || 5000
+                setMonthlyExpenses(Math.max(1000, Math.min(20000, value)))
+              }}
+              className="text-base sm:text-lg md:text-xl font-bold text-white text-right bg-transparent border-b-2 border-orange-500/50 focus:border-orange-500 focus:outline-none min-w-0 flex-shrink-0 max-w-[120px] sm:max-w-[160px] px-1 sm:px-2 py-1"
+              style={{
+                WebkitAppearance: 'none',
+                MozAppearance: 'textfield',
+              }}
+              min={1000}
+              max={20000}
+              step={100}
+            />
           </div>
           <Slider.Root
             className="relative flex items-center select-none touch-none w-full h-8 sm:h-6"
@@ -193,16 +210,33 @@ export default function FourPercentRuleCalculator({ onProjectionUpdate, onResult
           transition={{ delay: 0.2 }}
           className="card-input p-4 sm:p-6 space-y-4 sm:space-y-5 group"
         >
-          <div className="flex items-center justify-between gap-2">
-            <label className="flex items-center gap-2 sm:gap-3 text-sm sm:text-base font-medium text-slate-300">
+          <div className="flex items-center justify-between gap-2 min-w-0">
+            <label className="flex items-center gap-2 sm:gap-3 text-sm sm:text-base font-medium text-slate-300 flex-1 min-w-0">
               <div className="p-1.5 sm:p-2 rounded-lg flex-shrink-0 bg-amber-500/10 border border-amber-500/20">
                 <Sparkles className="w-4 h-4 text-amber-400" />
               </div>
-              <span>Current Savings</span>
+              <span className="truncate">Current Savings</span>
             </label>
-            <div className="text-lg sm:text-xl md:text-2xl font-bold text-white text-right flex-shrink-0">
-              {formatCurrency(currentSavings)}
-            </div>
+            <input
+              type="number"
+              value={currentSavings}
+              onChange={(e) => {
+                const value = parseFloat(e.target.value) || 0
+                setCurrentSavings(Math.max(0, Math.min(5000000, value)))
+              }}
+              onBlur={(e) => {
+                const value = parseFloat(e.target.value) || 100000
+                setCurrentSavings(Math.max(0, Math.min(5000000, value)))
+              }}
+              className="text-base sm:text-lg md:text-xl font-bold text-white text-right bg-transparent border-b-2 border-amber-500/50 focus:border-amber-500 focus:outline-none min-w-0 flex-shrink-0 max-w-[120px] sm:max-w-[160px] px-1 sm:px-2 py-1"
+              style={{
+                WebkitAppearance: 'none',
+                MozAppearance: 'textfield',
+              }}
+              min={0}
+              max={5000000}
+              step={1000}
+            />
           </div>
           <Slider.Root
             className="relative flex items-center select-none touch-none w-full h-8 sm:h-6"
@@ -229,15 +263,35 @@ export default function FourPercentRuleCalculator({ onProjectionUpdate, onResult
           transition={{ delay: 0.3 }}
           className="card-input p-4 sm:p-6 space-y-4 sm:space-y-5 group"
         >
-          <div className="flex items-center justify-between gap-2">
-            <label className="flex items-center gap-2 sm:gap-3 text-sm sm:text-base font-medium text-slate-300">
+          <div className="flex items-center justify-between gap-2 min-w-0">
+            <label className="flex items-center gap-2 sm:gap-3 text-sm sm:text-base font-medium text-slate-300 flex-1 min-w-0">
               <div className="p-1.5 sm:p-2 rounded-lg flex-shrink-0 bg-rose-500/10 border border-rose-500/20">
                 <Percent className="w-4 h-4 text-rose-400" />
               </div>
-              <span>Expected Annual Return</span>
+              <span className="truncate">Expected Annual Return</span>
             </label>
-            <div className="text-lg sm:text-xl md:text-2xl font-bold text-white text-right flex-shrink-0">
-              {expectedReturn.toFixed(2)}%
+            <div className="flex items-center gap-1">
+              <input
+                type="number"
+                value={expectedReturn}
+                onChange={(e) => {
+                  const value = parseFloat(e.target.value) || 0
+                  setExpectedReturn(Math.max(3, Math.min(12, value)))
+                }}
+                onBlur={(e) => {
+                  const value = parseFloat(e.target.value) || 7
+                  setExpectedReturn(Math.max(3, Math.min(12, value)))
+                }}
+                className="text-base sm:text-lg md:text-xl font-bold text-white text-right bg-transparent border-b-2 border-rose-500/50 focus:border-rose-500 focus:outline-none min-w-0 flex-shrink-0 max-w-[80px] sm:max-w-[100px] px-1 sm:px-2 py-1"
+                style={{
+                  WebkitAppearance: 'none',
+                  MozAppearance: 'textfield',
+                }}
+                min={3}
+                max={12}
+                step={0.1}
+              />
+              <span className="text-base sm:text-lg md:text-xl font-bold text-white flex-shrink-0">%</span>
             </div>
           </div>
           <Slider.Root

@@ -51,9 +51,13 @@ export function updateMetaTags({
 
   // Update type
   updateMetaTag('property', 'og:type', type)
+  
+  // Update site name
+  updateMetaTag('property', 'og:site_name', 'Tomorrow Worth')
 
   // Update Twitter card
   updateMetaTag('property', 'twitter:card', 'summary_large_image')
+  updateMetaTag('name', 'twitter:site', '@tomorrowworth')
 
   // Update canonical URL (ensure it's always absolute with protocol)
   if (canonical || url) {
